@@ -1,80 +1,140 @@
+const fs = require("fs").promises;
+const path = require("path");
+
 class ProductManager {
     constructor() {
-        this.products = [];
-        this.id = 0;
+        this.file = path.join("products.json");
     }
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
-            console.log("Error: todos los campos son obligatorios");
-            return;
+    async getProducts() {
+        try {
+            const rawData = await fs.readFile(this.file, "utf-8");
+            return JSON.parse(rawData);
+        } catch (error) {
+            console.error("Error al leer el archivo:", error.message);
+            return [];
+        }
+    }
+
+    async getProductById(id) {
+        const data = await this.getProducts();
+        return data.find((product) => product.id === id);
+    }
+
+    validateProductFields(product) {
+        const requiredFields = [
+            "title",
+            "description",
+            "price",
+            "thumbnail",
+            "code",
+            "stock",
+        ];
+        return requiredFields.every((field) => product[field]);
+    }
+
+    async addProduct(product) {
+        if (!this.validateProductFields(product)) {
+            console.error("Todos los campos son obligatorios");
+            return null;
         }
 
-        const existingProduct = this.products.find(
-            (product) => product.code === code,
-        );
+        const data = await this.getProducts();
+
+        const existingProduct = data.find((p) => p.code === product.code);
         if (existingProduct) {
-            console.log("Error: ya existe un producto con ese código ");
-            return;
+            console.log("Ya existe un producto con ese código");
+            return null;
         }
 
-        const product = {
-            id: this.id,
-            title: title,
-            description: description,
-            price: price,
-            thumbnail: thumbnail,
-            code: code,
-            stock: stock,
+        const newId = data.length > 0 ? data[data.length - 1].id + 1 : 1;
+
+        const newProduct = {
+            id: newId,
+            ...product,
         };
-        this.products.push(product);
-        this.id++;
-    }
 
-    getProducts() {
-        return this.products;
-    }
+        data.push(newProduct);
 
-    getProductById(id) {
-        const product = this.products.find((product) => product.id === id);
-
-        if (!product) {
-            return "not found";
+        try {
+            await fs.writeFile(this.file, JSON.stringify(data, null, 4));
+            return newProduct.id;
+        } catch (error) {
+            console.error("Error al escribir el archivo:", error.message);
+            return null;
         }
+    }
 
-        return product;
+    async updateProduct(id, upgrade) {
+        const data = await this.getProducts();
+        const updatedData = data.map((element) =>
+            element.id === id ? { id, ...upgrade } : element,
+        );
+
+        try {
+            await fs.writeFile(this.file, JSON.stringify(updatedData, null, 4));
+        } catch (error) {
+            console.error("Error al escribir el archivo:", error.message);
+        }
+    }
+
+    async deleteProduct(id) {
+        const data = await this.getProducts();
+        const updatedData = data.filter((product) => product.id !== id);
+
+        try {
+            await fs.writeFile(this.file, JSON.stringify(updatedData, null, 4));
+        } catch (error) {
+            console.error("Error al escribir el archivo:", error.message);
+        }
     }
 }
 
+const pla001 = {
+    title: "FlexiRex",
+    description: "T-rex flexible impreso en 3D",
+    price: 500,
+    thumbnail: "flexirex.jpg",
+    code: "PLA001",
+    stock: 15,
+};
+
+const petg001 = {
+    title: "Molde de corazón",
+    description: "molde rígido con forma de corazón para velas",
+    price: 300,
+    thumbnail: "molde-corazon.jpg",
+    code: "PETG001",
+    stock: 8,
+};
+
+const pla002 = {
+    title: "Destapador de botellas con contador",
+    description: "Destapa botellas de vidrio con contador incluido",
+    price: 3000,
+    thumbnail: "Destapador-con-contador.jpg",
+    code: "PLA002",
+    stock: 5,
+};
+
 const manager = new ProductManager();
 
-manager.addProduct(
-    "FlexiRex",
-    "T-rex flexible impreso en 3D",
-    500,
-    "flexirex.jpg",
-    "PLA001",
-    15,
-);
-manager.addProduct(
-    "Molde de corazón",
-    "molde rígido con forma de corazón para velas",
-    300,
-    "molde-corazon.jpg",
-    "PETG001",
-    8,
-);
-manager.addProduct(
-    "Destapador de botellas con contador",
-    "Destapa botellas de vidrio con contador incluido",
-    3000,
-    "Destapador-con-contador.jpg",
-    "PLA002",
-    5,
-);
+async function run() {
+    const manager = new ProductManager();
 
-const products = manager.getProducts();
-const productById = manager.getProductById(1);
+    try {
+        //await manager.addProduct(pla001);
 
-console.log(products);
-console.log(productById);
+        //await manager.addProduct(petg001);
+
+        //console.log(await manager.getProductById(1));
+
+        //await manager.updateProduct(2, pla002);
+
+        await manager.deleteProduct(1);
+    } catch (error) {
+        console.error("Error en la ejecución:", error.message);
+    }
+}
+
+run();
