@@ -1,9 +1,9 @@
-const fs = require("fs").promises;
-const path = require("path");
+import { promises as fs } from "fs";
+import path from "path";
 
 class ProductManager {
     constructor() {
-        this.file = path.join("products.json");
+        this.file = path.join("public/products.json");
     }
 
     async getProducts() {
@@ -17,11 +17,17 @@ class ProductManager {
     }
 
     async getProductById(id) {
-        const data = await this.getProducts();
-        return data.find((product) => product.id === id);
+        if (!id) {
+            throw new Error("ID del producto no proporcionado");
+        }
+        const products = await this.getProducts();
+        return products.find((product) => product.id === id);
     }
 
     validateProductFields(product) {
+        if (!product) {
+            throw new Error("Producto no proporcionado");
+        }
         const requiredFields = [
             "title",
             "description",
@@ -90,51 +96,4 @@ class ProductManager {
     }
 }
 
-const pla001 = {
-    title: "FlexiRex",
-    description: "T-rex flexible impreso en 3D",
-    price: 500,
-    thumbnail: "flexirex.jpg",
-    code: "PLA001",
-    stock: 15,
-};
-
-const petg001 = {
-    title: "Molde de corazón",
-    description: "molde rígido con forma de corazón para velas",
-    price: 300,
-    thumbnail: "molde-corazon.jpg",
-    code: "PETG001",
-    stock: 8,
-};
-
-const pla002 = {
-    title: "Destapador de botellas con contador",
-    description: "Destapa botellas de vidrio con contador incluido",
-    price: 3000,
-    thumbnail: "Destapador-con-contador.jpg",
-    code: "PLA002",
-    stock: 5,
-};
-
-const manager = new ProductManager();
-
-async function run() {
-    const manager = new ProductManager();
-
-    try {
-        //await manager.addProduct(pla001);
-
-        //await manager.addProduct(petg001);
-
-        //console.log(await manager.getProductById(1));
-
-        //await manager.updateProduct(2, pla002);
-
-        await manager.deleteProduct(1);
-    } catch (error) {
-        console.error("Error en la ejecución:", error.message);
-    }
-}
-
-run();
+export default ProductManager;

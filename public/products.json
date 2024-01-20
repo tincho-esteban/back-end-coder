@@ -1,0 +1,272 @@
+[
+    {
+        "id": 1,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 2,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 3,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 4,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 5,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 6,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 7,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 8,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 9,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 10,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 11,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 12,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 13,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 14,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 15,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 16,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 17,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 18,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 19,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 20,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 21,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 22,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 23,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 24,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 25,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 26,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 27,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    },
+    {
+        "id": 28,
+        "title": "FlexiRex",
+        "description": "T-rex flexible impreso en 3D",
+        "price": 500,
+        "thumbnail": "flexirex.jpg",
+        "code": "PLA001",
+        "stock": 15
+    },
+    {
+        "id": 29,
+        "title": "Molde de corazón",
+        "description": "molde rígido con forma de corazón para velas",
+        "price": 300,
+        "thumbnail": "molde-corazon.jpg",
+        "code": "PETG001",
+        "stock": 8
+    },
+    {
+        "id": 30,
+        "title": "Destapador de botellas con contador",
+        "description": "Destapa botellas de vidrio con contador incluido",
+        "price": 3000,
+        "thumbnail": "Destapador-con-contador.jpg",
+        "code": "PLA002",
+        "stock": 5
+    }
+]
