@@ -1,0 +1,73 @@
+<div>
+    <h1 class="title">Lista de productos</h1>
+</div>
+
+<div class="containerProducts">
+    <div class="containerCard" id="containerCards"></div>
+
+    <div class="containerForm">
+        <h3 class="title">Agregar productos</h3>
+        <form action="" id="form">
+            <div class="mb-2">
+                <label>Nombre Producto</label>
+                <input
+                    class="col-12"
+                    type="text"
+                    placeholder="nombre producto"
+                    id="name"
+                />
+            </div>
+            <div class="mb-2">
+                <label>Imagen</label>
+                <input
+                    class="col-12"
+                    type="text"
+                    placeholder="Imagen"
+                    id="img"
+                />
+            </div>
+            <div class="mb-2">
+                <label>Descripcion</label>
+                <input
+                    class="col-12"
+                    type="text"
+                    placeholder="descripcion"
+                    id="description"
+                />
+            </div>
+            <div class="mb-2">
+                <label>Precio</label>
+                <input
+                    class="col-12"
+                    type="number"
+                    placeholder="precio"
+                    id="price"
+                />
+            </div>
+            <div class="mb-2">
+                <label>Codigo</label>
+                <input
+                    class="col-12"
+                    type="text"
+                    placeholder="codigo"
+                    id="code"
+                />
+            </div>
+            <button id="addBtn" class="btn btn-success">Agregar Producto</button>
+
+            <h3 class="title mt-3">Eliminar Producto</h3>
+            <div class="mb-2">
+                <label>Codigo</label>
+                <input
+                    class="col-12"
+                    type="text"
+                    placeholder="codigo"
+                    id="codeToDelete"
+                />
+            </div>
+            <button id="deleteBtn" class="btn btn-danger">Eliminar Producto</button>
+        </form>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
