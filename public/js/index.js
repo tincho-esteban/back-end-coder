@@ -5,8 +5,7 @@ const initSocket = () => {
     if (typeof io !== "undefined") {
         socket = io();
 
-        socket.on("newProduct", (products) => renderProducts(products));
-        socket.on("productToDelete", (products) => renderProducts(products));
+        socket.on("refresh", () => getProducts().then(renderProducts));
 
         document.getElementById("addBtn").addEventListener("click", addProduct);
         document
@@ -18,9 +17,12 @@ const initSocket = () => {
 const getProducts = async () => {
     try {
         const response = await fetch("./products.json");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return await response.json();
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 };
 
@@ -33,8 +35,10 @@ const renderProducts = (products) => {
                     <h5 class="card-title">${prod.title}</h5>
                     <img src="${prod.thumbnail}" alt="" class="cardImg">
                     <p class="card-text">${prod.description}</p>
-                    <p class="card-text">PRECIO: $${prod.price}</p>
+                    <p class="card-text">Id: ${prod.id}</p>
+                    <p class="card-text">Precio: $${prod.price}</p>
                     <p class="card-text">Codigo: ${prod.code}</p>
+                    <p class="card-text">Stock: ${prod.stock}</p>
                 </div>
             </div>
         `,
@@ -43,34 +47,39 @@ const renderProducts = (products) => {
     document.getElementById("containerCards").innerHTML = list;
 };
 
-const getFormValues = () => ({
-    title: document.getElementById("name").value,
-    thumbnail: document.getElementById("img").value,
-    description: document.getElementById("description").value,
-    price: document.getElementById("price").value,
-    code: document.getElementById("code").value,
-});
+const getFormValues = () => {
+    const title = document.getElementById("name").value;
+    const thumbnail = document.getElementById("img").value;
+    const description = document.getElementById("description").value;
+    const price = document.getElementById("price").value;
+    const code = document.getElementById("code").value;
+    const stock = document.getElementById("stock").value;
+
+    if (!title || !thumbnail || !description || !price || !code || !stock) {
+        return null;
+    }
+
+    return {
+        title,
+        thumbnail,
+        description,
+        price,
+        code,
+        stock,
+    };
+};
 
 const addProduct = async (e) => {
     e.preventDefault();
     const product = getFormValues();
-    const products = await getProducts();
-    products.push(product);
-    socket.emit("newProduct", products);
+    socket.emit("newProduct", product);
     form.reset();
 };
 
 const deleteProduct = async (e) => {
     e.preventDefault();
-    const code = form.codeToDelete.value;
-    const products = await getProducts();
-    const productFound = products.find((p) => p.code == code);
-    if (productFound) {
-        products.splice(products.indexOf(productFound), 1);
-        socket.emit("deleteProduct", products);
-    } else {
-        console.log(`Product with code ${code} not found.`);
-    }
+    const id = form.idToDelete.value;
+    socket.emit("deleteProduct", id);
     form.reset();
 };
 
