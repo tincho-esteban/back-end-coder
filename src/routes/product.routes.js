@@ -1,10 +1,12 @@
-import express from "express";
-import ProductManager from "../managers/ProductManager.js";
+import { Router } from "express";
 import path from "path";
+import ProductManager from "../dao/fs/ProductManager.js";
+import ProductManagerDB from "../dao/db/ProductManager.db.js";
 
-const productRouter = express.Router();
+const productRouter = Router();
 const productsFilePath = path.resolve(process.cwd(), "public", "products.json");
-const productManager = new ProductManager(productsFilePath);
+const productManagerFS = new ProductManager(productsFilePath);
+const productManagerDB = new ProductManagerDB();
 
 const handleErrors = (cb) => async (req, res, next) => {
     try {
@@ -14,50 +16,59 @@ const handleErrors = (cb) => async (req, res, next) => {
     }
 };
 
-productRouter.get(
-    "/",
-    handleErrors(async (req, res) => {
-        const { limit } = req.query;
-        const products = await productManager.get();
-        const limitedProducts = limit ? products.slice(0, limit) : products;
-        res.json(limitedProducts);
-    }),
-);
+productRouter
+    .route("/")
+    .get(
+        handleErrors(async (req, res) => {
+            const { limit } = req.query;
+            const products = await productManagerDB.get();
+            const limitedProducts = limit ? products.slice(0, limit) : products;
+            res.json(limitedProducts);
+        }),
+    )
+    .post(
+        handleErrors(async (req, res) => {
+            const newProduct = req.body;
+            const product = await productManagerDB.addProduct(newProduct);
+            res.json(product);
+        }),
+    );
+
+productRouter
+    .route("/:pid")
+    .get(
+        handleErrors(async (req, res) => {
+            const { pid } = req.params;
+            const product = await productManagerDB.getProductById(pid);
+            res.json(product);
+        }),
+    )
+    .put(
+        handleErrors(async (req, res) => {
+            const { pid } = req.params;
+            const newProduct = req.body;
+            await productManagerDB.updateProduct(pid, newProduct);
+            res.json(newProduct);
+        }),
+    )
+    .delete(
+        handleErrors(async (req, res) => {
+            const { pid } = req.params;
+            await productManagerDB.deleteProduct(pid);
+            res.json({ message: "Producto eliminado" });
+        }),
+    );
 
 productRouter.get(
-    "/:pid",
+    "/insertion",
     handleErrors(async (req, res) => {
-        const { pid } = req.params;
-        const product = await productManager.getProductById(pid);
-        res.json(product);
-    }),
-);
-
-productRouter.post(
-    "/",
-    handleErrors(async (req, res) => {
-        const newProduct = req.body;
-        const product = await productManager.addProduct(newProduct);
-        res.json(product);
-    }),
-);
-
-productRouter.put(
-    "/:pid",
-    handleErrors(async (req, res) => {
-        const { pid } = req.params;
-        const newProduct = req.body;
-        await productManager.updateProduct(pid, newProduct);
-        res.json(newProduct);
-    }),
-);
-
-productRouter.delete(
-    "/:pid",
-    handleErrors(async (req, res) => {
-        const { pid } = req.params;
-        await productManager.deleteProduct(pid);
-        res.json({ message: "Producto eliminado" });
+        let FSproducts = await productManagerFS.get();
+        FSproducts = FSproducts.map(({ id, ...rest }) => rest);
+        const carts = productManagerDB.insertion(FSproducts);
+        res.json({
+            message: "Productos insertados correctamente",
+            cartsInserted: "carts",
+        });
     }),
 );
 

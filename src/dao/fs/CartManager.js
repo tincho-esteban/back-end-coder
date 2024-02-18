@@ -31,16 +31,11 @@ class CartManager extends FileManager {
 
         if (!product && pid != null) throw new Error("Producto no encontrado");
 
-        return { cart, product, carts };
+        return { cart, carts };
     }
 
     async addProduct(cid, pid) {
-        const { cart, product, carts } = await this.findCartAndProduct(
-            cid,
-            pid,
-        );
-
-        if (!product) throw new Error("Producto no encontrado");
+        const { cart, carts } = await this.findCartAndProduct(cid, pid);
 
         const productInCart = cart.products.find(
             (product) => product.id === pid,

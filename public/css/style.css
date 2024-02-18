@@ -8,11 +8,10 @@
 .card {
     width: 350px;
     height: 580px;
-    padding: 30px;
+    padding: 30px 30px 150px;
     display: flex;
     align-items: center;
     margin: 20px;
-    padding-bottom: 150px;
 }
 
 .containerCard {
@@ -35,4 +34,22 @@
 .containerForm {
     width: 80%;
     margin: 30px;
+}
+
+.chatContainer {
+    margin: 0 auto;
+    width: 90%;
+    height: 70%;
+    background-color: rgb(240, 240, 240);
+    overflow-y: auto;
+}
+
+.chatInputContainer {
+    margin: 0 auto;
+}
+
+#chatBox {
+    margin: 1% 5%;
+    width: 90%;
+    height: 10%;
 }

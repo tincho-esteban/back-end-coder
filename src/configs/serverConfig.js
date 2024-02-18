@@ -1,23 +1,25 @@
 import { Server } from "socket.io";
-import ProductManager from "../managers/ProductManager.js";
+import ProductManager from "../dao/fs/ProductManager.js";
 import app from "./appConfig.js";
 import path from "path";
+import displayRoutes from "express-routemap";
+import messageModel from "../dao/models/message.model.js";
 
 const port = 8080;
-
 const productsFilePath = path.resolve(process.cwd(), "public", "products.json");
 const productManager = new ProductManager(productsFilePath);
 
 const httpServer = app.listen(port, () => {
+    displayRoutes(app);
     console.log(`Servidor iniciado en puerto: ${port}`);
 });
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
     console.log("Nuevo cliente conectado");
-    socket.on("newProduct", (product) => {
+    socket.on("newProduct", async (product) => {
         try {
-            productManager.addProduct(product);
+            await productManager.addProduct(product);
             io.emit("refresh");
         } catch (error) {
             console.error(error);
@@ -29,14 +31,18 @@ io.on("connection", (socket) => {
             await productManager.deleteProduct(data);
             io.emit("refresh");
         } catch (error) {
-            if (error.message === "Producto no encontrado") {
-                console.error(
-                    `El producto con el ID ${data} no existe y no puede ser borrado.`,
-                );
-            } else {
-                console.error(error);
-            }
+            console.error(
+                error.message === "Producto no encontrado"
+                    ? `El producto con el ID ${data} no existe y no puede ser borrado.`
+                    : error,
+            );
         }
+    });
+
+    socket.on("message", async (data) => {
+        await messageModel.create(data);
+        const messages = await messageModel.find({});
+        io.emit("messages", messages);
     });
 });
 

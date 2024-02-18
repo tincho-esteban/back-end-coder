@@ -16,7 +16,7 @@ const initSocket = () => {
 
 const getProducts = async () => {
     try {
-        const response = await fetch("./products.json");
+        const response = await fetch("/api/products");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

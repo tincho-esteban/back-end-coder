@@ -1,0 +1,17 @@
+<main role="main" class="chatPage">
+    <header>
+        <h1 class="title">Chat</h1>
+    </header>
+
+    <section aria-live="polite" class="chatContainer" id="chatContainer">
+    </section>
+
+    <footer class="chatInputContainer">
+        <label for="chatBox">Escribe un mensaje:</label>
+        <input type="text" id="chatBox" name="message" />
+    </footer>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/chat.js"></script>

@@ -2,12 +2,11 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.render("home", {});
-});
+const renderPage = (pageName) => (req, res) => {
+    res.render(pageName, {});
+};
 
-router.get("/realtimeproducts", (req, res) => {
-    res.render("realTimeProducts", {});
-});
+router.get("/", renderPage("home"));
+router.get("/realtimeproducts", renderPage("realTimeProducts"));
 
 export default router;
