@@ -3,6 +3,7 @@ import path from "path";
 import ProductManager from "../dao/fs/ProductManager.js";
 import ProductManagerDB from "../dao/db/ProductManager.db.js";
 import uploader from "../middlewares/multer.middleware.js";
+import ProductModel from "../dao/models/Product.model.js";
 
 const productRouter = Router();
 const productsFilePath = path.resolve(process.cwd(), "public", "products.json");
@@ -28,7 +29,7 @@ productRouter
         }),
     )
     .post(
-        uploader.single("thumbnail"),
+        uploader.array("thumbnail", 5),
         handleErrors(async (req, res) => {
             const product = await productManagerDB.addProduct(req);
             res.json(product);

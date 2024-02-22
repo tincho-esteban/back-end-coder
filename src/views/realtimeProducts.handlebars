@@ -3,77 +3,82 @@
 </div>
 
 <div class="containerProducts">
-    <div class="containerCard" id="containerCards"></div>
+    <div class="containerCardRealTime" id="containerCards"></div>
 
     <div class="containerForm">
         <h3 class="title">Agregar productos</h3>
         <form action="" id="form">
             <div class="mb-2">
-                <label>Nombre Producto</label>
+                <label>Nombre Producto*</label>
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="text"
                     placeholder="nombre producto"
                     id="name"
                 />
             </div>
             <div class="mb-2">
-                <label>Imagen</label>
+                <label>imágenes</label>
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="file"
+                    multiple
                     placeholder="thumbnail"
                     id="img"
                 />
             </div>
             <div class="mb-2">
-                <label>Descripcion</label>
+                <label>Descripcion*</label>
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="text"
                     placeholder="descripcion"
                     id="description"
                 />
             </div>
             <div class="mb-2">
-                <label>Precio</label>
+                <label>Precio*</label>
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="number"
                     placeholder="precio"
                     id="price"
                 />
             </div>
             <div class="mb-2">
-                <label>Codigo</label>
+                <label>Codigo*</label>
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="text"
                     placeholder="codigo"
                     id="code"
                 />
             </div>
             <div class="mb-2">
-                <label>Stock</label>
+                <label>Stock*</label>
+                <br />
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="number"
                     placeholder="Stock"
                     id="stock"
                 />
             </div>
+            <p>* campos obligatorios</p>
             <button id="addBtn" class="btn btn-success">Agregar Producto</button>
 
             <h3 class="title mt-3">Eliminar Producto</h3>
             <div class="mb-2">
-                <label>Id</label>
+                <label>Id*</label>
+                <br />
                 <input
-                    class="col-12"
+                    class="col-10"
                     type="text"
                     placeholder="Id"
                     id="idToDelete"
                 />
             </div>
+            <p>* campos obligatorios</p>
             <button id="deleteBtn" class="btn btn-danger">Eliminar Producto</button>
         </form>
     </div>

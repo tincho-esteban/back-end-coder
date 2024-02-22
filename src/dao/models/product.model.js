@@ -8,18 +8,18 @@ const productSchema = new Schema(
         title: { type: String, required: true },
         description: { type: String, required: true },
         price: { type: Number, required: true },
-        thumbnail: { type: String },
+        thumbnail: { type: Array, default: [] },
         code: { type: String, required: true },
         stock: { type: Number, required: true },
     },
     { timestamps: true },
 );
 
-productSchema.methods.setImgUrl = function (fileName) {
+productSchema.methods.setImgUrl = function (fileNames) {
     try {
-        this.thumbnail = `${BASE_URL}${fileName}`;
+        this.thumbnail = fileNames.map((fileName) => `${BASE_URL}${fileName}`);
     } catch (error) {
-        console.error("Error setting image URL:", error);
+        console.error("Error setting image URLs:", error);
     }
 };
 const ProductModel = model(collectionName, productSchema);

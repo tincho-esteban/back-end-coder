@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .title {
     background-color: #1C658C;
     color: #fff;
@@ -20,11 +26,19 @@
     justify-content: center;
 }
 
+.containerCardRealTime {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+}
+
 .cardImg {
     width: 300px;
     height: 250px;
     border-radius: 5px;
     margin-bottom: 10px;
+    object-fit: cover;
 }
 
 .containerProducts {
@@ -32,7 +46,7 @@
 }
 
 .containerForm {
-    width: 80%;
+    width: 300px;
     margin: 30px;
 }
 

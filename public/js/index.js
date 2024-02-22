@@ -37,6 +37,33 @@ const refreshProducts = async () => {
     }
 };
 
+const renderImages = (array, id) => {
+    if (array.length === 1) {
+        return `<img src="${array[0]}" alt="" class="cardImg">`;
+    }
+    return `<div id="carousel${id}" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    ${array
+                        .map(
+                            (thumb, index) => `
+                        <div class="carousel-item ${
+                            index === 0 ? "active" : ""
+                        }">
+                            <img class="cardImg" src="${thumb}" alt="Slide ${index}">
+                        </div>
+                    `,
+                        )
+                        .join("")}
+                </div>
+                <a class="carousel-control-prev" href="#carousel${id}" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next" href="#carousel${id}" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>
+            </div>`;
+};
+
 const renderProducts = (products) => {
     const list = products
         .map(
@@ -44,7 +71,7 @@ const renderProducts = (products) => {
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">${prod.title}</h5>
-                    <img src="${prod.thumbnail}" alt="" class="cardImg">
+                    ${renderImages(prod.thumbnail, prod._id)}
                     <p class="card-text">${prod.description}</p>
                     <p class="card-text">Id: ${prod._id}</p>
                     <p class="card-text">Precio: $${prod.price}</p>

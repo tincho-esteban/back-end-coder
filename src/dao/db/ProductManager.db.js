@@ -6,7 +6,7 @@ class ProductManagerDB {
     }
 
     async addProduct(req) {
-        const { body: product, file } = req;
+        const { body: product, files } = req;
 
         if (!product) throw new Error("Error: Producto no proporcionado");
 
@@ -18,9 +18,9 @@ class ProductManagerDB {
 
         const productStored = await ProductModel.create(product);
 
-        if (file) {
-            const { filename } = file;
-            productStored.setImgUrl(filename);
+        if (files) {
+            const filenames = files.map((file) => file.filename);
+            productStored.setImgUrl(filenames);
             await productStored.save();
         }
 
