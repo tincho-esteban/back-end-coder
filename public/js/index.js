@@ -1,28 +1,39 @@
 const form = document.getElementById("form");
+const addBtn = document.getElementById("addBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const containerCards = document.getElementById("containerCards");
 let socket;
 
 const initSocket = () => {
     if (typeof io !== "undefined") {
         socket = io();
 
-        socket.on("refresh", () => getProducts().then(renderProducts));
+        socket.on("refresh", refreshProducts);
 
-        document.getElementById("addBtn").addEventListener("click", addProduct);
-        document
-            .getElementById("deleteBtn")
-            .addEventListener("click", deleteProduct);
+        if (addBtn) {
+            addBtn.addEventListener("click", addProduct);
+        }
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener("click", deleteProduct);
+        }
     }
 };
 
 const getProducts = async () => {
+    const response = await fetch("/api/products");
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+};
+
+const refreshProducts = async () => {
     try {
-        const response = await fetch("/api/products");
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
+        const products = await getProducts();
+        renderProducts(products);
     } catch (error) {
-        throw error;
+        console.error("Error al obtener los productos:", error);
     }
 };
 
@@ -35,7 +46,7 @@ const renderProducts = (products) => {
                     <h5 class="card-title">${prod.title}</h5>
                     <img src="${prod.thumbnail}" alt="" class="cardImg">
                     <p class="card-text">${prod.description}</p>
-                    <p class="card-text">Id: ${prod.id}</p>
+                    <p class="card-text">Id: ${prod._id}</p>
                     <p class="card-text">Precio: $${prod.price}</p>
                     <p class="card-text">Codigo: ${prod.code}</p>
                     <p class="card-text">Stock: ${prod.stock}</p>
@@ -44,7 +55,7 @@ const renderProducts = (products) => {
         `,
         )
         .join(" ");
-    document.getElementById("containerCards").innerHTML = list;
+    containerCards.innerHTML = list;
 };
 
 const getFormValues = () => {
@@ -84,4 +95,4 @@ const deleteProduct = async (e) => {
 };
 
 initSocket();
-getProducts().then(renderProducts);
+refreshProducts();

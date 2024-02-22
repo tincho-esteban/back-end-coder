@@ -5,21 +5,32 @@ class ProductManagerDB {
         return ProductModel.find({});
     }
 
-    async addProduct(product) {
-        if (!product) throw new Error("Producto no proporcionado");
+    async addProduct(req) {
+        const { body: product, file } = req;
+
+        if (!product) throw new Error("Error: Producto no proporcionado");
 
         const existingProduct = await ProductModel.findOne({
             code: product.code,
         });
         if (existingProduct)
-            throw new Error("Ya existe un producto con ese código");
+            throw new Error("Error: Ya existe un producto con ese código");
 
-        return ProductModel.create(product);
+        const productStored = await ProductModel.create(product);
+
+        if (file) {
+            const { filename } = file;
+            productStored.setImgUrl(filename);
+            await productStored.save();
+        }
+
+        return productStored;
     }
 
     async getProductById(id) {
         const product = await ProductModel.findById(id);
-        if (!product) throw new Error("Producto no encontrado");
+        if (!product)
+            throw new Error(`Error: Producto con id ${id} no encontrado`);
 
         return product;
     }
@@ -30,14 +41,20 @@ class ProductManagerDB {
             updateProduct,
             { new: true },
         );
-        if (!product) throw new Error("Producto no encontrado");
+        if (!product)
+            throw new Error(
+                `Error: Producto con id ${id} no encontrado al intentar actualizar`,
+            );
 
         return product;
     }
 
     async deleteProduct(productId) {
         const product = await ProductModel.findByIdAndDelete(productId);
-        if (!product) throw new Error("Producto no encontrado");
+        if (!product)
+            throw new Error(
+                `Error: Producto con id ${productId} no encontrado al intentar eliminar`,
+            );
 
         return product;
     }
@@ -47,9 +64,12 @@ class ProductManagerDB {
 
         if (productsDB.length > 0) return "Carritos ya insertados";
 
-        await ProductModel.insertMany(products);
-
-        return this.get();
+        try {
+            await ProductModel.insertMany(products);
+            return this.get();
+        } catch (error) {
+            throw new Error("Error al insertar productos: " + error.message);
+        }
     }
 }
 

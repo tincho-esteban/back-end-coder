@@ -1,13 +1,11 @@
 import { Server } from "socket.io";
-import ProductManager from "../dao/fs/ProductManager.js";
+import ProductManager from "../dao/db/ProductManager.db.js";
 import app from "./appConfig.js";
-import path from "path";
 import displayRoutes from "express-routemap";
 import messageModel from "../dao/models/message.model.js";
 
 const port = 8080;
-const productsFilePath = path.resolve(process.cwd(), "public", "products.json");
-const productManager = new ProductManager(productsFilePath);
+const productManager = new ProductManager();
 
 const httpServer = app.listen(port, () => {
     displayRoutes(app);
