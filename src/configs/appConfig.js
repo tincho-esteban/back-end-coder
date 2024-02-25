@@ -1,5 +1,6 @@
 import express from "express";
-import { engine } from "express-handlebars";
+import { create } from "express-handlebars";
+import Handlebars from "handlebars";
 import path from "path";
 import productRouter from "../routes/product.routes.js";
 import cartRouter from "../routes/cart.routes.js";
@@ -9,13 +10,23 @@ import mongoose from "./dbConfig.js";
 
 const app = express();
 
-app.engine("handlebars", engine());
-app.set("views", path.join(process.cwd(), "src", "views"));
-app.set("view engine", "handlebars");
+Handlebars.registerHelper("isMultiple", function (array) {
+    return array.length > 1;
+});
+
+const hbs = create({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+    },
+});
 
 app.use(express.json());
 app.use("/static", express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+
+app.engine("handlebars", hbs.engine);
+app.set("views", path.join(process.cwd(), "src", "views"));
+app.set("view engine", "handlebars");
 
 app.use("/", viewsRouter);
 app.use("/api/products", productRouter);

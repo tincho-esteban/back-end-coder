@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const collectionName = "products";
 const BASE_URL = "http://localhost:8080/static/img/";
@@ -14,6 +15,8 @@ const productSchema = new Schema(
     },
     { timestamps: true },
 );
+
+productSchema.plugin(mongoosePaginate);
 
 productSchema.methods.setImgUrl = function (fileNames) {
     try {

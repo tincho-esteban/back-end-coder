@@ -1,40 +1,40 @@
 <div>
-    <h1 class="title">Lista de productos</h1>
+    <h1 class="title">Carrito</h1>
 </div>
 
 <div class="containerCard" id="containerCards">
-    {{#each products}}
+    {{#each response.payload.products}}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{this.title}}</h5>
-                {{#if (isMultiple this.thumbnail)}}
-                    <div id="carousel{{this._id}}" class="carousel slide">
+                <h5 class="card-title">{{this.product.title}}</h5>
+                {{#if (isMultiple this.product.thumbnail)}}
+                    <div id="carousel{{this.product._id}}" class="carousel slide">
                         <div class="carousel-inner">
-                            {{#each this.thumbnail}}
+                            {{#each this.product.thumbnail}}
                                 <div class="carousel-item {{#if @first}}active{{/if}}">
                                     <img class="cardImg" src="{{this}}" alt="Slide {{@index}}">
                                 </div>
                             {{/each}}
                         </div>
-                        <a class="carousel-control-prev" href="#carousel{{this._id}}" role="button" data-slide="prev">
+                        <a class="carousel-control-prev" href="#carousel{{this.product._id}}" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         </a>
-                        <a class="carousel-control-next" href="#carousel{{this._id}}" role="button" data-slide="next">
+                        <a class="carousel-control-next" href="#carousel{{this.product._id}}" role="button" data-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         </a>
                     </div>
                 {{else}}
-                    {{#each this.thumbnail}}
+                    {{#each this.product.thumbnail}}
                         {{#if @first}}
                             <img src="{{this}}" alt="" class="cardImg">
                         {{/if}}
                     {{/each}}
                 {{/if}}
-                <p class="card-text">{{this.description}}</p>
-                <p class="card-text">Id: {{this._id}}</p>
-                <p class="card-text">Precio: ${{this.price}}</p>
-                <p class="card-text">Codigo: {{this.code}}</p>
-                <p class="card-text">Stock: {{this.stock}}</p>
+                <p class="card-text">{{this.product.description}}</p>
+                <p class="card-text">Id: {{this.product._id}}</p>
+                <p class="card-text">Precio: ${{this.product.price}}</p>
+                <p class="card-text">Codigo: {{this.product.code}}</p>
+                <p class="card-text">Stock: {{this.product.stock}}</p>
             </div>
         </div>
     {{/each}}

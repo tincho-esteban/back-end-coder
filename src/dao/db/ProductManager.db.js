@@ -1,8 +1,103 @@
+import path from "path";
 import ProductModel from "../models/Product.model.js";
+import ProductManager from "../fs/ProductManager.js";
+
+const productsFilePath = path.resolve(process.cwd(), "public", "products.json");
+const productManagerFS = new ProductManager(productsFilePath);
 
 class ProductManagerDB {
     async get() {
         return ProductModel.find({});
+    }
+
+    async getProductById(req) {
+        const { pid } = req.params;
+        const product = await ProductModel.findById(pid);
+        if (!product)
+            throw new Error(`Error: Producto con id ${pid} no encontrado`);
+
+        return {
+            status: "success",
+            payload: product,
+            message: `Producto con id ${pid} encontrado`,
+            code: 200,
+        };
+    }
+
+    async getPaginated(req) {
+        const {
+            page = 1,
+            limit = 10,
+            sort,
+            sortField,
+            query,
+            queryField,
+        } = req.query;
+
+        let sortObj = {};
+
+        if (sortField && sort) {
+            sortObj[sortField] = sort === "1" ? 1 : -1;
+        } else if (sort) {
+            sortObj["price"] = sort === "1" ? 1 : -1;
+        }
+
+        let searchQuery = {};
+
+        if (query && queryField) {
+            searchQuery[queryField] = new RegExp(query, "i");
+        } else if (query) {
+            if (query === "available") {
+                searchQuery = { stock: { $gt: 0 } };
+            } else if (query === "notAvailable") {
+                searchQuery = { stock: 0 };
+            } else {
+                searchQuery["$or"] = [
+                    { title: new RegExp(query, "i") },
+                    { description: new RegExp(query, "i") },
+                    { code: new RegExp(query, "i") },
+                ];
+            }
+        }
+
+        const pagination = await ProductModel.paginate(searchQuery, {
+            page,
+            limit,
+            sort: sortObj,
+        });
+
+        const prevLink = pagination.hasPrevPage
+            ? `http://localhost:8080/products?page=${
+                  pagination.prevPage
+              }&limit=${limit}${sort ? `&sort=` + sort : ""}${
+                  sortField ? `&sortField=` + sortField : ""
+              }${query ? `&query=` + query : ""}${
+                  queryField ? `&queryField=` + queryField : ""
+              }`
+            : null;
+
+        const nextLink = pagination.hasNextPage
+            ? `http://localhost:8080/products?page=${
+                  pagination.nextPage
+              }&limit=${limit}${sort ? `&sort=` + sort : ""}${
+                  sortField ? `&sortField=` + sortField : ""
+              }${query ? `&query=` + query : ""}${
+                  queryField ? `&queryField=` + queryField : ""
+              }`
+            : null;
+
+        return {
+            status: "success",
+            payload: pagination.docs,
+            totalPages: pagination.totalPages,
+            prevPage: pagination.prevPage,
+            nextPage: pagination.nextPage,
+            page: pagination.page,
+            hasPrevPage: pagination.hasPrevPage,
+            hasNextPage: pagination.hasNextPage,
+            prevLink,
+            nextLink,
+        };
     }
 
     async addProduct(req) {
@@ -24,49 +119,79 @@ class ProductManagerDB {
             await productStored.save();
         }
 
-        return productStored;
+        return {
+            status: "success",
+            payload: productStored,
+            message: "Producto añadido correctamente",
+            code: 201,
+        };
     }
 
-    async getProductById(id) {
-        const product = await ProductModel.findById(id);
-        if (!product)
-            throw new Error(`Error: Producto con id ${id} no encontrado`);
-
-        return product;
-    }
-
-    async updateProduct(id, updateProduct) {
+    async updateProduct(req) {
+        const { pid } = req.params;
+        const updateProduct = req.body;
         const product = await ProductModel.findByIdAndUpdate(
-            id,
+            pid,
             updateProduct,
-            { new: true },
+            {
+                new: true,
+            },
         );
         if (!product)
             throw new Error(
-                `Error: Producto con id ${id} no encontrado al intentar actualizar`,
+                `Error: Producto con id ${pid} no encontrado al intentar actualizar`,
             );
 
-        return product;
+        return {
+            status: "success",
+            payload: product,
+            message: `Producto con id ${pid} actualizado correctamente`,
+            code: 200,
+        };
     }
 
-    async deleteProduct(productId) {
-        const product = await ProductModel.findByIdAndDelete(productId);
+    async deleteProduct(req) {
+        const { pid } = req.params;
+        const product = await ProductModel.findByIdAndDelete(pid);
         if (!product)
             throw new Error(
-                `Error: Producto con id ${productId} no encontrado al intentar eliminar`,
+                `Error: Producto con id ${pid} no encontrado al intentar eliminar`,
             );
 
-        return product;
+        return {
+            status: "success",
+            payload: product,
+            message: `Producto con id ${pid} eliminado correctamente`,
+            code: 200,
+        };
     }
 
-    async insertion(products) {
-        const productsDB = await ProductModel.find({});
-
-        if (productsDB.length > 0) return "Carritos ya insertados";
-
+    async insertion() {
         try {
-            await ProductModel.insertMany(products);
-            return this.get();
+            let FSproducts = await productManagerFS.get();
+            FSproducts = FSproducts.map(({ id, ...rest }) => rest);
+
+            const existingProducts = await this.get();
+
+            const productsToInsert = FSproducts.filter(
+                (product) =>
+                    !existingProducts.some(
+                        (existingProduct) =>
+                            existingProduct.code === product.code,
+                    ),
+            );
+
+            if (!productsToInsert.length)
+                throw new Error("No hay productos para insertar");
+
+            await ProductModel.insertMany(productsToInsert);
+            const products = this.get();
+            return {
+                status: "success",
+                payload: products,
+                message: "Productos insertados correctamente",
+                code: 201,
+            };
         } catch (error) {
             throw new Error("Error al insertar productos: " + error.message);
         }
