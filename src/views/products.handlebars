@@ -1,4 +1,4 @@
-<div>
+<div id="topNav">
     <h1 class="title">Lista de productos</h1>
 </div>
 
@@ -13,53 +13,58 @@
     <button type="button"class="btn btn-outline-secondary rounded" id="showAvailable">Mostrar disponibles</button>
 </div>
 
-<div class="containerCard" id="containerCards">
-    {{#each response.payload}}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{this.title}}</h5>
-                {{#if (isMultiple this.thumbnail)}}
-                    <div id="carousel{{this._id}}" class="carousel slide">
-                        <div class="carousel-inner">
-                            {{#each this.thumbnail}}
-                                <div class="carousel-item {{#if @first}}active{{/if}}">
-                                    <img class="cardImg" src="{{this}}" alt="Slide {{@index}}">
-                                </div>
-                            {{/each}}
+
+{{#if (eq status "error")}}
+    <div class="error-message">{{message}}</div>
+{{else}}
+    <div class="containerCard" id="containerCards">
+        {{#each response.payload}}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    {{#if (isMultiple this.thumbnail)}}
+                        <div id="carousel{{this._id}}" class="carousel slide">
+                            <div class="carousel-inner">
+                                {{#each this.thumbnail}}
+                                    <div class="carousel-item {{#if @first}}active{{/if}}">
+                                        <img class="cardImg" src="{{this}}" alt="Slide {{@index}}">
+                                    </div>
+                                {{/each}}
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel{{this._id}}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel{{this._id}}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </a>
                         </div>
-                        <a class="carousel-control-prev" href="#carousel{{this._id}}" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        </a>
-                        <a class="carousel-control-next" href="#carousel{{this._id}}" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        </a>
-                    </div>
-                {{else}}
-                    {{#each this.thumbnail}}
-                        {{#if @first}}
-                            <img src="{{this}}" alt="" class="cardImg">
-                        {{/if}}
-                    {{/each}}
-                {{/if}}
-                <p class="card-text">{{this.description}}</p>
-                <p class="card-text">Id: {{this._id}}</p>
-                <p class="card-text">Precio: ${{this.price}}</p>
-                <p class="card-text">Código: {{this.code}}</p>
-                <p class="card-text">Stock: {{this.stock}}</p>
-                <button class="btn btn-primary" onclick=addToCart("{{this._id}}")> agregar al carrito</button>
+                    {{else}}
+                        {{#each this.thumbnail}}
+                            {{#if @first}}
+                                <img src="{{this}}" alt="" class="cardImg">
+                            {{/if}}
+                        {{/each}}
+                    {{/if}}
+                    <p class="card-text">{{this.description}}</p>
+                    <p class="card-text">Id: {{this._id}}</p>
+                    <p class="card-text">Precio: ${{this.price}}</p>
+                    <p class="card-text">Código: {{this.code}}</p>
+                    <p class="card-text">Stock: {{this.stock}}</p>
+                    <button class="btn btn-primary" onclick=addToCart("{{this._id}}")> agregar al carrito</button>
+                </div>
             </div>
-        </div>
-    {{/each}}
-</div>
-<nav aria-label="Page navigation" class="d-flex justify-content-center">
-    <ul class="pagination">
-        {{#if response.hasPrevPage}}
-            <li class="page-item btn btn-outline-secondary rounded" onclick="window.location.href='{{response.prevLink}}'"><</li>
-        {{/if}}
-        <li class="page-item btn btn-outline-primary rounded">{{response.page}}</li>
-        {{#if response.hasNextPage}}
-            <li class="page-item btn btn-outline-secondary rounded" onclick="window.location.href='{{response.nextLink}}'">></li>
-        {{/if}}
-    </ul>
-</nav>
-<script src="/static/js/products.js"></script>
+        {{/each}}
+    </div>
+    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination">
+            {{#if response.hasPrevPage}}
+                <li class="page-item btn btn-outline-secondary rounded" onclick="window.location.href='{{response.prevLink}}'"><</li>
+            {{/if}}
+            <li class="page-item btn btn-outline-primary rounded">{{response.page}}</li>
+            {{#if response.hasNextPage}}
+                <li class="page-item btn btn-outline-secondary rounded" onclick="window.location.href='{{response.nextLink}}'">></li>
+            {{/if}}
+        </ul>
+    </nav>
+    <script src="/static/js/products.js"></script>
+{{/if}}

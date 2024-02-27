@@ -1,4 +1,5 @@
 let cartId;
+let htmlCartIcon;
 
 async function addToCart(pid) {
     try {
@@ -10,10 +11,27 @@ async function addToCart(pid) {
 
         await fetch(`/api/carts/${cartId}/product/${pid}`, { method: "POST" });
         alert("Producto agregado al carrito");
+        if (!htmlCartIcon) showCart();
     } catch (err) {
         console.error(err);
         alert("Error al agregar al carrito. Por favor, inténtalo de nuevo.");
     }
+}
+
+function showCart() {
+    const cartIcon = document.createElement("i");
+    cartIcon.className = "fa fa-shopping-cart";
+
+    const cartLink = document.createElement("a");
+    cartLink.href = `http://localhost:8080/carts/${cartId}`;
+    cartLink.appendChild(cartIcon);
+
+    cartLink.addEventListener("click", function (event) {
+        window.location.href = cartLink.href;
+    });
+
+    document.getElementById("topNav").appendChild(cartLink);
+    htmlCartIcon = true;
 }
 
 function updateUrlAndRedirect(key, value) {

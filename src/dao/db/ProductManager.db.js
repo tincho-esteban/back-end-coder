@@ -66,6 +66,13 @@ class ProductManagerDB {
             sort: sortObj,
         });
 
+        if (pagination.page > pagination.totalPages || pagination.page < 1) {
+            return {
+                status: "error",
+                message: "La página solicitada no existe",
+            };
+        }
+
         const prevLink = pagination.hasPrevPage
             ? `http://localhost:8080/products?page=${
                   pagination.prevPage

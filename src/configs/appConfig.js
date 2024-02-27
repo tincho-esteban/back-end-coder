@@ -14,6 +14,10 @@ Handlebars.registerHelper("isMultiple", function (array) {
     return array.length > 1;
 });
 
+Handlebars.registerHelper("eq", function (a, b) {
+    return a === b;
+});
+
 const hbs = create({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
