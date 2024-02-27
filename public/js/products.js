@@ -22,9 +22,13 @@ function showCart() {
     const cartIcon = document.createElement("i");
     cartIcon.className = "fa fa-shopping-cart";
 
+    const cartButton = document.createElement("button");
+    cartButton.className = "btn btn-primary";
+    cartButton.appendChild(cartIcon);
+
     const cartLink = document.createElement("a");
     cartLink.href = `http://localhost:8080/carts/${cartId}`;
-    cartLink.appendChild(cartIcon);
+    cartLink.appendChild(cartButton);
 
     cartLink.addEventListener("click", function (event) {
         window.location.href = cartLink.href;
