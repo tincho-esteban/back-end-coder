@@ -29,8 +29,7 @@ class CartManagerDB {
         };
     }
 
-    async getCartById(req) {
-        const { cid } = req.params;
+    async getCartById(cid) {
         const cart = await cartModel.findById(cid);
         return {
             status: "success",
@@ -50,8 +49,7 @@ class CartManagerDB {
         };
     }
 
-    async addProduct(req) {
-        const { cid, pid } = req.params;
+    async addProduct(cid, pid) {
         const cart = await this.findCartAndProduct(cid, pid);
 
         const productInCart = cart.products.find((product) =>
@@ -75,12 +73,11 @@ class CartManagerDB {
         };
     }
 
-    async deleteProduct(req) {
-        const { cid, pid } = req.params;
+    async deleteProduct(cid, pid) {
         const cart = await this.findCartAndProduct(cid, pid);
 
-        cart.products = cart.products.filter((product) =>
-            product.product.equals(pid),
+        cart.products = cart.products.filter(
+            (product) => !product.product.equals(pid),
         );
 
         cart.markModified("products");
@@ -112,10 +109,7 @@ class CartManagerDB {
         }
     }
 
-    async updateCart(req) {
-        const { cid } = req.params;
-        const { products } = req.body;
-
+    async updateCart(cid, products) {
         const cart = await this.findCartAndProduct(cid, null);
 
         if (!products || !Array.isArray(products))
@@ -132,10 +126,7 @@ class CartManagerDB {
         };
     }
 
-    async updateProduct(req) {
-        const { cid, pid } = req.params;
-        const { quantity } = req.body;
-
+    async updateProduct(cid, pid, quantity) {
         const cart = await this.findCartAndProduct(cid, pid);
 
         const productInCart = cart.products.find((product) =>
@@ -158,8 +149,7 @@ class CartManagerDB {
         };
     }
 
-    async deleteCartProducts(req) {
-        const { cid } = req.params;
+    async deleteCartProducts(cid) {
         const cart = await this.findCartAndProduct(cid, null);
 
         cart.products = [];

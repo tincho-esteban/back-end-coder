@@ -37,17 +37,22 @@ cartRouter
     .route("/:cid")
     .get(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.getCartById(req));
+            const { cid } = req.params;
+
+            res.json(await cartManagerDB.getCartById(cid));
         }),
     )
     .put(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.updateCart(req));
+            const { cid } = req.params;
+            const { products } = req.body;
+            res.json(await cartManagerDB.updateCart(cid, products));
         }),
     )
     .delete(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.deleteCartProducts(req));
+            const { cid } = req.params;
+            res.json(await cartManagerDB.deleteCartProducts(cid));
         }),
     );
 
@@ -55,17 +60,21 @@ cartRouter
     .route("/:cid/product/:pid")
     .post(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.addProduct(req));
+            const { cid, pid } = req.params;
+            res.json(await cartManagerDB.addProduct(cid, pid));
         }),
     )
     .put(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.updateProduct(req));
+            const { cid, pid } = req.params;
+            const { quantity } = req.body;
+            res.json(await cartManagerDB.updateProduct(cid, pid, quantity));
         }),
     )
     .delete(
         handleErrors(async (req, res) => {
-            res.json(await cartManagerDB.deleteProduct(req));
+            const { cid, pid } = req.params;
+            res.json(await cartManagerDB.deleteProduct(cid, pid));
         }),
     );
 

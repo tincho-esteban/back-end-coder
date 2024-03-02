@@ -17,13 +17,32 @@ productRouter
     .route("/")
     .get(
         handleErrors(async (req, res) => {
-            res.json(await productManagerDB.getPaginated(req));
+            const {
+                page = 1,
+                limit = 10,
+                sort,
+                sortField,
+                query,
+                queryField,
+            } = req.query;
+
+            const queryParams = {
+                page,
+                limit,
+                sort,
+                sortField,
+                query,
+                queryField,
+            };
+
+            res.json(await productManagerDB.getPaginated(queryParams));
         }),
     )
     .post(
         uploader.array("thumbnail", 5),
         handleErrors(async (req, res) => {
-            res.json(await productManagerDB.addProduct(req));
+            const { body: product, files } = req;
+            res.json(await productManagerDB.addProduct(product, files));
         }),
     );
 
@@ -38,17 +57,21 @@ productRouter
     .route("/:pid")
     .get(
         handleErrors(async (req, res) => {
-            res.json(await productManagerDB.getProductById(req));
+            const { pid } = req.params;
+            res.json(await productManagerDB.getProductById(pid));
         }),
     )
     .put(
         handleErrors(async (req, res) => {
-            res.json(await productManagerDB.updateProduct(req));
+            const { pid } = req.params;
+            const updateProduct = req.body;
+            res.json(await productManagerDB.updateProduct(pid, updateProduct));
         }),
     )
     .delete(
         handleErrors(async (req, res) => {
-            res.json(await productManagerDB.deleteProduct(req));
+            const { pid } = req.params;
+            res.json(await productManagerDB.deleteProduct(pid));
         }),
     );
 

@@ -10,8 +10,7 @@ class ProductManagerDB {
         return ProductModel.find({});
     }
 
-    async getProductById(req) {
-        const { pid } = req.params;
+    async getProductById(pid) {
         const product = await ProductModel.findById(pid);
         if (!product)
             throw new Error(`Error: Producto con id ${pid} no encontrado`);
@@ -24,7 +23,7 @@ class ProductManagerDB {
         };
     }
 
-    async getPaginated(req) {
+    async getPaginated(params) {
         const {
             page = 1,
             limit = 10,
@@ -32,7 +31,7 @@ class ProductManagerDB {
             sortField,
             query,
             queryField,
-        } = req.query;
+        } = params;
 
         let sortObj = {};
 
@@ -107,9 +106,7 @@ class ProductManagerDB {
         };
     }
 
-    async addProduct(req) {
-        const { body: product, files } = req;
-
+    async addProduct(product, files) {
         if (!product) throw new Error("Error: Producto no proporcionado");
 
         const existingProduct = await ProductModel.findOne({
@@ -134,9 +131,7 @@ class ProductManagerDB {
         };
     }
 
-    async updateProduct(req) {
-        const { pid } = req.params;
-        const updateProduct = req.body;
+    async updateProduct(pid, updateProduct) {
         const product = await ProductModel.findByIdAndUpdate(
             pid,
             updateProduct,
@@ -157,8 +152,7 @@ class ProductManagerDB {
         };
     }
 
-    async deleteProduct(req) {
-        const { pid } = req.params;
+    async deleteProduct(pid) {
         const product = await ProductModel.findByIdAndDelete(pid);
         if (!product)
             throw new Error(
